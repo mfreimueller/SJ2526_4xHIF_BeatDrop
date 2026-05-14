@@ -17,7 +17,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>Aufgabe3_BusinessService</module>
-        <module>Aufgabe3_RestfulApi</module>
+        <module>Aufgabe4_RestfulApi</module>
     </modules>
 
     <properties>
