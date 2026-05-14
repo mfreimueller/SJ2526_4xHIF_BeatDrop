@@ -1,0 +1,44 @@
+@startuml
+
+hide empty methods
+hide empty attributes
+
+entity Artist {
+    artistName: String <<n>>
+    genre: String
+}
+
+entity Stage {
+    stageName: String <nn>
+    capacity: Integer <<nn, [gt 0]>>
+    performances: List<Performance>
+}
+
+entity Performance {
+    artist: Artist {nn}
+    stage: Stage {nn}
+    day: LocalDate {nn}
+    startMinute: Integer {nn}
+    durationInMinutes: Integer {nn, [gt 0]}
+    ticketOrders: List<TicketOrder>
+}
+
+enum TicketType {
+    FESTIVAL <<F>>
+    REGULAR <<R>>
+    VIP <<V>>
+    PROMO <<P>>
+}
+
+entity TicketOrder {
+    performance: Performance {nn}
+    ticketType: TicketType
+    price: BigDecimal
+}
+
+Performance "1" *-- "1" Artist
+Performance "0 .. *" -- "1" Stage
+
+Performance "1" -- "0 .. *" TicketOrder
+
+@enduml
