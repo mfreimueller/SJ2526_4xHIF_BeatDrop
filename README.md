@@ -4,6 +4,26 @@ BeatDrop ist eine digitale Plattform, die Festivalveranstalter mit Fans verbinde
 
 ---
 
+## Inhalte
+
+- Layered Architecture
+	- Service-Layer
+	- Presentation-Layer
+- Java Stream API
+- DTOs
+- Command Objects
+- Unit Testing
+- HTTP Verbs
+	- MockMVC
+	- Mockito (Mock-, InjectMock-Annotations)
+	- JsonPathResultMatcher
+- Datenstrukturen auf Basis eines Use-Cases selbst entwerfen
+- KEIN HATEOS
+- KEIN Domain-Layer
+- KEIN Persistence-Layer
+
+---
+
 ## Aufgaben
 
 ---
