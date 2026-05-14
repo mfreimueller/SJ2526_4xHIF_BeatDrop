@@ -67,12 +67,8 @@ class TicketRefundServiceTest {
     @Test
     @DisplayName("STAGE_OVERLAP: exactly 25% overlap is not refunded (strictly greater required)")
     void stageOverlap_exact25percent_noRefund() {
-        // A: 14:00-14:40 (startMinute=840, duration=40)
-        var early = createPerformance(artistA, mainStage, day, 840, 40, 100);
-        // B: 14:30-15:30 (startMinute=870, duration=60)
-        // Overlap: 14:30-14:40 = 10min => 10/60 = 16.7% < 25%
-        // Hmm, that's below. Let me calculate differently:
         // A: 14:00-15:00 (duration=60)
+        var early = createPerformance(artistA, mainStage, day, 840, 40, 100);
         // B: 14:45-15:45 (duration=60)
         // Overlap: 14:45-15:00 = 15min => 15/60 = 25% exactly — NOT refunded
         var early2 = createPerformance(artistA, mainStage, day, 840, 60, 100);
@@ -232,12 +228,6 @@ class TicketRefundServiceTest {
     @Test
     @DisplayName("Duplicate conflict (A,B) and (B,A) should not appear")
     void duplicateConflict_notReported() {
-        // Three performances: A(14:00-15:00), B(14:30-15:30), C(15:00-16:00)
-        // A vs B: overlap 14:30-15:00 = 30min, 30/60 = 50% > 25% → B refunded
-        // A vs C: no overlap
-        // B vs C: no overlap (B ends at 15:30, C starts at 15:00 — actually they overlap!)
-        // Let me adjust: A(14:00-14:45), B(14:30-15:15), C(14:45-15:30)
-        // Actually, let me keep it simple — just verify no pair appears twice
         var a = createPerformance(artistA, mainStage, day, 840, 45, 100);
         var later = createPerformance(artistB, mainStage, day, 870, 45, 100);
         addTicketOrder(later, TicketType.REGULAR, new BigDecimal("100.00"));
