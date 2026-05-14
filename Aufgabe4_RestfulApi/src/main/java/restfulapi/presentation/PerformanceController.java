@@ -1,7 +1,6 @@
 package restfulapi.presentation;
 
 import java.util.List;
-import java.util.UUID;
 
 import jakarta.validation.Valid;
 
@@ -35,7 +34,7 @@ public class PerformanceController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PerformanceDto> findById(@PathVariable UUID id) {
+    public ResponseEntity<PerformanceDto> findById(@PathVariable Long id) {
         return performanceService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -49,7 +48,7 @@ public class PerformanceController {
     }
 
     @GetMapping("/{id}/stage-info")
-    public ResponseEntity<StageInfoDto> getStageInfo(@PathVariable UUID id) {
+    public ResponseEntity<StageInfoDto> getStageInfo(@PathVariable Long id) {
         return performanceService.findStageInfo(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

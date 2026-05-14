@@ -21,6 +21,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import tools.jackson.databind.ObjectMapper;
+
 import restfulapi.commands.CreateArtistCommand;
 import restfulapi.commands.UpdateArtistCommand;
 import restfulapi.dto.ArtistDto;
@@ -31,6 +33,9 @@ class ArtistControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @MockitoBean
     private ArtistService artistService;
@@ -84,14 +89,14 @@ class ArtistControllerTest {
     void createArtist_valid_shouldReturn201() throws Exception {
         when(artistService.createArtist(any())).thenReturn(sampleArtist);
 
+        var command = CreateArtistCommand.builder()
+                .artistName("DJ Electric")
+                .genre("Electronic")
+                .build();
+
         mockMvc.perform(post("/api/artists")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("""
-                                {
-                                    "artistName": "DJ Electric",
-                                    "genre": "Electronic"
-                                }
-                                """))
+                        .content(objectMapper.writeValueAsString(command)))
                 .andExpect(status().isCreated())
                 .andExpect(header().exists("Location"))
                 .andExpect(jsonPath("$.artistName").value("DJ Electric"));
@@ -102,27 +107,27 @@ class ArtistControllerTest {
         when(artistService.createArtist(any()))
                 .thenThrow(new IllegalArgumentException("Artist with name 'DJ Electric' already exists"));
 
+        var command = CreateArtistCommand.builder()
+                .artistName("DJ Electric")
+                .genre("Electronic")
+                .build();
+
         mockMvc.perform(post("/api/artists")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("""
-                                {
-                                    "artistName": "DJ Electric",
-                                    "genre": "Electronic"
-                                }
-                                """))
+                        .content(objectMapper.writeValueAsString(command)))
                 .andExpect(status().isConflict());
     }
 
     @Test
     void createArtist_invalidInput_shouldReturn400() throws Exception {
+        var command = CreateArtistCommand.builder()
+                .artistName("")
+                .genre("")
+                .build();
+
         mockMvc.perform(post("/api/artists")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("""
-                                {
-                                    "artistName": "",
-                                    "genre": ""
-                                }
-                                """))
+                        .content(objectMapper.writeValueAsString(command)))
                 .andExpect(status().isBadRequest());
     }
 
@@ -134,13 +139,13 @@ class ArtistControllerTest {
                 .build();
         when(artistService.updateArtist(eq("DJ Electric"), any())).thenReturn(updated);
 
+        var command = UpdateArtistCommand.builder()
+                .genre("Rock")
+                .build();
+
         mockMvc.perform(put("/api/artists/DJ Electric")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("""
-                                {
-                                    "genre": "Rock"
-                                }
-                                """))
+                        .content(objectMapper.writeValueAsString(command)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.genre").value("Rock"));
     }
@@ -150,25 +155,25 @@ class ArtistControllerTest {
         when(artistService.updateArtist(eq("Unknown"), any()))
                 .thenThrow(new IllegalArgumentException("Artist with name 'Unknown' not found"));
 
+        var command = UpdateArtistCommand.builder()
+                .genre("Rock")
+                .build();
+
         mockMvc.perform(put("/api/artists/Unknown")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("""
-                                {
-                                    "genre": "Rock"
-                                }
-                                """))
+                        .content(objectMapper.writeValueAsString(command)))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     void updateArtist_invalidInput_shouldReturn400() throws Exception {
+        var command = UpdateArtistCommand.builder()
+                .genre("")
+                .build();
+
         mockMvc.perform(put("/api/artists/DJ Electric")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("""
-                                {
-                                    "genre": ""
-                                }
-                                """))
+                        .content(objectMapper.writeValueAsString(command)))
                 .andExpect(status().isBadRequest());
     }
 }

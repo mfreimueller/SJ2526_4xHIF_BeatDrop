@@ -1,7 +1,6 @@
 package restfulapi.domain;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -13,10 +12,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "identifier")
+@EqualsAndHashCode(of = "id")
 public class Performance {
 
-    private UUID identifier;
+    private Long id;
     private String artistName;
     private String stageName;
     private LocalDate day;

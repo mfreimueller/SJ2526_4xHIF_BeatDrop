@@ -2,7 +2,6 @@ package restfulapi.service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -17,7 +16,7 @@ public class PerformanceService {
         throw new UnsupportedOperationException("Stub — to be mocked in tests");
     }
 
-    public Optional<PerformanceDto> findById(UUID identifier) {
+    public Optional<PerformanceDto> findById(Long id) {
         throw new UnsupportedOperationException("Stub — to be mocked in tests");
     }
 
@@ -25,7 +24,7 @@ public class PerformanceService {
         throw new UnsupportedOperationException("Stub — to be mocked in tests");
     }
 
-    public Optional<StageInfoDto> findStageInfo(UUID performanceId) {
+    public Optional<StageInfoDto> findStageInfo(Long performanceId) {
         throw new UnsupportedOperationException("Stub — to be mocked in tests");
     }
 }
